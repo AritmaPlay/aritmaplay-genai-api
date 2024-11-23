@@ -3,13 +3,31 @@ import os
 import google.auth
 import vertexai
 from vertexai.preview.generative_models import GenerativeModel, ChatSession
+from google.cloud import secretmanager
 
 # Initialize Flask app
 app = Flask(__name__)
 
-# Set Google Application Credentials
-GOOGLE_CREDENTIALS_FILE = "capstone-c242-ps102-40f339ebbaec.json"
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS_FILE
+def get_secret(secret_name: str, version: str = "latest") -> str:
+    """
+    Fetch secret value from Google Secret Manager.
+    """
+    client = secretmanager.SecretManagerServiceClient()
+    project_id = os.getenv("GOOGLE_CLOUD_PROJECT")  # Ambil ID proyek dari variabel lingkungan
+    secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/{version}"
+    response = client.access_secret_version(name=secret_path)
+    return response.payload.data.decode("UTF-8")
+
+# Load Google Application Credentials from Secret Manager
+try:
+    service_account_key = get_secret("ServiceAccountGenAI")
+    key_file_path = "/tmp/capstone-c242-ps102-40f339ebbaec.json"
+    with open(key_file_path, "w") as f:
+        f.write(service_account_key)
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_file_path
+except Exception as e:
+    print(f"Failed to load service account key: {e}")
+    raise
 
 # Authenticate with Google Cloud
 credentials, project = google.auth.default()
@@ -29,7 +47,9 @@ def health():
     return jsonify({'status': 'healthy'}), 200
 
 def get_chat_response(chat: ChatSession, prompt: str):
-    """Berikan kata-kata motivasi untuk anak-anak yang baru saja kalah dalam kuis matematika dalam 1 kalimat saja."""
+    """
+    Berikan kata-kata motivasi untuk anak-anak yang baru saja kalah dalam kuis matematika dalam 1 kalimat saja.
+    """
     response = chat.send_message(prompt)
     return response.text
 
@@ -57,4 +77,5 @@ def generate_response():
 
 # Run the Flask app
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)

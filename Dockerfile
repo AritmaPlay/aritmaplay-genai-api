@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r /app/requirements.txt --index-url https://pypi
 COPY . /app/
 
 # Set the environment variable for GCP credentials
-ENV GOOGLE_APPLICATION_CREDENTIALS=/app/try-vertexai-441706-3ccd7445630d.json
+# ENV GOOGLE_APPLICATION_CREDENTIALS=/app/try-vertexai-441706-3ccd7445630d.json
 
 # Expose the port the app runs on
 EXPOSE 8080

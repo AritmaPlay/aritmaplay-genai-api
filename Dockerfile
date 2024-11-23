@@ -11,6 +11,8 @@ RUN pip install --no-cache-dir -r /app/requirements.txt --index-url https://pypi
 # Copy application files into the container
 COPY . /app/
 
+COPY capstone-c242-ps102-40f339ebbaec.json /app/
+
 # Expose the port the app runs on
 EXPOSE 8080
 

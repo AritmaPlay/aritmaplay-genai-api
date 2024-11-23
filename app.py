@@ -1,22 +1,33 @@
 from flask import Flask, request, jsonify
 import os
+import logging
+from google.cloud import secretmanager
 import google.auth
 import vertexai
 from vertexai.preview.generative_models import GenerativeModel, ChatSession
-from google.cloud import secretmanager
 
 # Initialize Flask app
 app = Flask(__name__)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_secret(secret_name: str, version: str = "latest") -> str:
     """
     Fetch secret value from Google Secret Manager.
     """
-    client = secretmanager.SecretManagerServiceClient()
-    project_id = os.getenv("GOOGLE_CLOUD_PROJECT")  # Ambil ID proyek dari variabel lingkungan
-    secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/{version}"
-    response = client.access_secret_version(name=secret_path)
-    return response.payload.data.decode("UTF-8")
+    try:
+        client = secretmanager.SecretManagerServiceClient()
+        project_id = os.getenv("GOOGLE_CLOUD_PROJECT")  # Fetch project ID
+        if not project_id:
+            raise ValueError("GOOGLE_CLOUD_PROJECT environment variable is not set.")
+        secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/{version}"
+        response = client.access_secret_version(name=secret_path)
+        return response.payload.data.decode("UTF-8")
+    except Exception as e:
+        logger.error(f"Failed to access secret {secret_name}: {e}")
+        raise
 
 # Load Google Application Credentials from Secret Manager
 try:
@@ -25,22 +36,37 @@ try:
     with open(key_file_path, "w") as f:
         f.write(service_account_key)
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_file_path
+    logger.info("Service account key loaded successfully.")
 except Exception as e:
-    print(f"Failed to load service account key: {e}")
+    logger.error(f"Failed to load service account key: {e}")
     raise
 
 # Authenticate with Google Cloud
-credentials, project = google.auth.default()
-print(f"Authenticated to project: {project}")
+try:
+    credentials, project = google.auth.default()
+    logger.info(f"Authenticated to project: {project}")
+except Exception as e:
+    logger.error(f"Failed to authenticate with Google Cloud: {e}")
+    raise
 
 # Initialize Vertex AI
-PROJECT_ID = "capstone-c242-ps102"
-LOCATION = "us-central1"
-vertexai.init(project=PROJECT_ID, location=LOCATION)
+try:
+    PROJECT_ID = "capstone-c242-ps102"
+    LOCATION = "us-central1"
+    vertexai.init(project=PROJECT_ID, location=LOCATION)
+    logger.info("Vertex AI initialized successfully.")
+except Exception as e:
+    logger.error(f"Failed to initialize Vertex AI: {e}")
+    raise
 
 # Initialize the generative AI model and chat session
-model = GenerativeModel("gemini-1.0-pro")
-chat = model.start_chat()
+try:
+    model = GenerativeModel("gemini-1.0-pro")
+    chat = model.start_chat()
+    logger.info("Generative AI model initialized successfully.")
+except Exception as e:
+    logger.error(f"Failed to initialize Generative AI model: {e}")
+    raise
 
 @app.route('/health', methods=['GET'])
 def health():
@@ -48,10 +74,14 @@ def health():
 
 def get_chat_response(chat: ChatSession, prompt: str):
     """
-    Berikan kata-kata motivasi untuk anak-anak yang baru saja kalah dalam kuis matematika dalam 1 kalimat saja.
+    Generate a response using the AI model.
     """
-    response = chat.send_message(prompt)
-    return response.text
+    try:
+        response = chat.send_message(prompt)
+        return response.text
+    except Exception as e:
+        logger.error(f"Error generating chat response: {e}")
+        raise
 
 @app.route('/generate', methods=['POST'])
 def generate_response():
@@ -73,6 +103,7 @@ def generate_response():
         ai_response = get_chat_response(chat, prompt)
         return jsonify({"response": ai_response}), 200
     except Exception as e:
+        logger.error(f"Failed to generate response: {e}")
         return jsonify({"error": str(e)}), 500
 
 # Run the Flask app

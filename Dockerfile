@@ -8,15 +8,14 @@ WORKDIR /app
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r /app/requirements.txt --index-url https://pypi.org/simple/
 
-# Copy application files into the container
+# Copy the rest of the application files into the container
 COPY . /app/
 
-COPY capstone-c242-ps102-40f339ebbaec.json /app/
-
-ENV GOOGLE_APPLICATION_CREDENTIALS=/app/capstone-c242-ps102-40f339ebbaec.json
+# Set the environment variable for GCP credentials
+# ENV GOOGLE_APPLICATION_CREDENTIALS=/app/try-vertexai-441706-3ccd7445630d.json
 
 # Expose the port the app runs on
 EXPOSE 8080
 
-# Run the app with Gunicorn for production
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
+# Run the Flask app
+CMD ["python", "app.py"]

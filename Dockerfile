@@ -13,6 +13,8 @@ COPY . /app/
 
 COPY capstone-c242-ps102-40f339ebbaec.json /app/
 
+ENV GOOGLE_APPLICATION_CREDENTIALS=/app/capstone-c242-ps102-40f339ebbaec.json
+
 # Expose the port the app runs on
 EXPOSE 8080
 

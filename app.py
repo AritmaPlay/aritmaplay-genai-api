@@ -8,7 +8,7 @@ from vertexai.preview.generative_models import GenerativeModel, ChatSession
 app = Flask(__name__)
 
 # Set Google Application Credentials
-GOOGLE_CREDENTIALS_FILE = "/secrets/capstone-c242-ps102-40f339ebbaec.json"
+GOOGLE_CREDENTIALS_FILE = "/secrets/capstone-c242-ps102-592cd9da967c.json"
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS_FILE
 
 # Authenticate with Google Cloud

@@ -7,7 +7,7 @@ import re
 app = Flask(__name__)
 
 # Inisialisasi Google Cloud Credentials
-GOOGLE_CREDENTIALS_FILE = "/secret/capstone-c242-ps102-592cd9da967c.json"
+GOOGLE_CREDENTIALS_FILE = "/secrets/capstone-c242-ps102-592cd9da967c.json"
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS_FILE
 
 # Konfigurasi Google Cloud Project dan Lokasi

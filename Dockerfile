@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8080
 
 # Define environment variable
-ENV GOOGLE_APPLICATION_CREDENTIALS="capstone-c242-ps102-592cd9da967c.json"
+ENV GOOGLE_APPLICATION_CREDENTIALS="secrets/capstone-c242-ps102-592cd9da967c.json"
 
 # Run app.py when the container launches
 CMD ["python", "app.py"]

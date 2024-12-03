@@ -1,21 +1,20 @@
-# Use a Python base image
-FROM python:3.11-slim
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim
 
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy requirements.txt and install dependencies
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r /app/requirements.txt --index-url https://pypi.org/simple/
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Copy the rest of the application files into the container
-COPY . /app/
-
-# Set the environment variable for GCP credentials
-# ENV GOOGLE_APPLICATION_CREDENTIALS=/app/try-vertexai-441706-3ccd7445630d.json
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port the app runs on
 EXPOSE 8080
 
-# Run the Flask app
+# Define environment variable
+ENV GOOGLE_APPLICATION_CREDENTIALS="capstone-c242-ps102-592cd9da967c.json"
+
+# Run app.py when the container launches
 CMD ["python", "app.py"]

@@ -18,4 +18,4 @@ COPY . /app/
 EXPOSE 8080
 
 # Run the Flask app
-CMD ["python", "app.py"]
+CMD ["python", "motivational_genai.py"]

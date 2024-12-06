@@ -20,11 +20,6 @@ vertexai.init(project=PROJECT_ID, location=LOCATION)
 def health():
     return jsonify({'status': 'healthy'}), 200
 
-def get_chat_response(chat: ChatSession, prompt: str):
-    """Berikan kata-kata motivasi untuk anak-anak yang baru saja kalah dalam kuis matematika dalam 1 kalimat saja."""
-    response = chat.send_message(prompt)
-    return response.text
-
 @app.route('/generate-motivation', methods=['POST'])
 def generate_motivation():
     total_question = request.form.get("total_question")
@@ -58,9 +53,22 @@ def generate_motivation():
         response = chat.send_message(prompt)
         cleaned_response = response.text.strip()
         cleaned_response = re.sub(r'\s+', ' ', cleaned_response)
-        return jsonify({"response": cleaned_response}), 200
+        json_response = {
+            'success': True,
+            'message': 'Generated text successfuly',
+            'response_code': 200,
+            'data': cleaned_response
+        }
+        return jsonify(json_response), 200
+    
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        json_response = {
+            'success': False,
+            'message': str(e),
+            'response_code': 500,
+            'data': None
+        }
+        return jsonify(json_response),500
 
 
 if __name__ == '__main__':

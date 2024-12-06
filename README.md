@@ -1,7 +1,7 @@
 
 # Motivation Generator API
 
-This project provides a Flask-based API that generates motivational messages for elementary school students based on their math quiz performance. The application leverages Google Cloud's Vertex AI and the `Gemini 1.5 Flash` generative model to deliver concise and personalized feedback.
+This API aims to generate motivational messages for elementary school students based on their math quiz performance. By utilizing Google Cloud's Vertex AI and Flash's `Gemini 1.5 generative model', this API will provide feedback that is concise and personalized.
 
 ---
 

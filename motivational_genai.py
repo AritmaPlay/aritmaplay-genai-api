@@ -35,11 +35,18 @@ def generate_motivation():
     Instruksi :
     1. Analisis hasil kuis berdasarkan:
         - Jumlah soal benar, Waktu pengerjaan, Tingkat kesulitan kuis (berdasarkan mode kuis)
-    2. Berikan saran menggunakan kata motivasi maksimal 30 kata:
+    2. Berikan saran menggunakan kata motivasi maksimal 12 kata:
         - Gunakan bahasa sederhana dan menyenangkan untuk murid SD
         - Sertakan motivasi untuk meningkatkan kemampuan
         - Perhatikan kecepatan pengerjaan dan akurasi murid
     3. Variasikan saran agar unik dan tidak repetitif.
+    4. Penting: Tanggapan hanya boleh berisi maksimal 12 kata, tanpa penjelasan tambahan.
+    
+    Berikut adalah contoh kalimat saran yang tepat:  
+    1. "Hebat, kamu sudah bagus! Terus tingkatkan kecepatan dan ketelitian ya!"  
+    2. "Kerja kerasmu terlihat! Tingkatkan fokus agar hasil semakin luar biasa!"  
+    3. "Bagus! Kecepatanmu sudah oke, tingkatkan ketelitian soal berikutnya!"
+    4. "Bagus! Terus belajar, waktu pengerjaanmu sudah semakin cepat!"  
 
     Murid ini bernama {user_name} 
     dan baru saja mengerjakan {total_question} soal matematika mode {quiz_mode} dengan jumlah soal benar adalah {correct_answer} soal dalam

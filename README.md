@@ -25,7 +25,7 @@ This API aims to generate motivational messages for elementary school students b
 
 1. Clone the repository:
    ```bash
-   git clone [repository-url](https://github.com/AritmaPlay/aritmaplay-genai-api.git)
+   git clone https://github.com/AritmaPlay/aritmaplay-genai-api.git
    cd aritmaplay-genai-api
    ```
 

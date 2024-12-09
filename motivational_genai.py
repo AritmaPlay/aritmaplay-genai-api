@@ -25,7 +25,6 @@ def generate_motivation():
     total_question = request.form.get("total_question")
     time = request.form.get("time")
     correct_answer = request.form.get("correct_answer")
-    user_name = request.form.get("name")
     quiz_mode = request.form.get("mode")
 
     prompt = f"""
@@ -48,7 +47,7 @@ def generate_motivation():
     3. "Bagus! Kecepatanmu sudah oke, tingkatkan ketelitian soal berikutnya!"
     4. "Bagus! Terus belajar, waktu pengerjaanmu sudah semakin cepat!"  
 
-    Murid ini bernama {user_name} 
+    Murid ini bernama Aritma 
     dan baru saja mengerjakan {total_question} soal matematika mode {quiz_mode} dengan jumlah soal benar adalah {correct_answer} soal dalam
     waktu pengerjaan {time} detik.
     """
